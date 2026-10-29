@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NxtWave Workshop | Growth Tracker</title>
+<style>
+:root{--navy:#17365d;--blue:#2563eb;--teal:#0f9f83;--bg:#f4f7fb;--muted:#627089;--line:#dce5f0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:#18243a}
+header{background:linear-gradient(115deg,#17365d,#2563eb);color:white;padding:28px max(22px,calc((100% - 1100px)/2))}
+header .tag{font-size:12px;text-transform:uppercase;letter-spacing:1.6px;opacity:.8}h1{margin:8px 0;font-size:clamp(26px,4vw,40px)}header p{max-width:680px;line-height:1.55;margin:0;color:#e4edff}
+main{max-width:1100px;margin:24px auto;padding:0 18px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 5px 18px #18365d08}.metric{font-size:28px;font-weight:800;color:var(--navy);margin-top:7px}.label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px}.bar{height:9px;background:#e8eef7;border-radius:20px;overflow:hidden;margin-top:12px}.bar span{display:block;height:100%;width:0;background:var(--teal);transition:width .2s}.layout{display:grid;grid-template-columns:1fr 1.2fr;gap:16px;margin-top:16px}h2{font-size:18px;margin:0 0 15px;color:var(--navy)}label{display:block;font-size:13px;color:#42516a;margin:12px 0 6px}input,select{width:100%;padding:11px 12px;border:1px solid #cbd7e6;border-radius:9px;font:inherit;background:white}button{border:0;border-radius:9px;padding:11px 14px;background:var(--blue);color:white;font-weight:700;cursor:pointer;margin-top:13px}button.secondary{background:#eaf1ff;color:var(--navy);border:1px solid #d4e1fb}button.danger{background:#fff0f0;color:#a52b2b;border:1px solid #ffd5d5}.row{display:flex;gap:9px;align-items:center}.row>*{flex:1}.muted{color:var(--muted);font-size:13px;line-height:1.5}.code{font-weight:800;letter-spacing:1px;color:var(--teal)}table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:10px 7px;border-bottom:1px solid #edf1f6}th{color:var(--muted);font-weight:700}td{overflow-wrap:anywhere}.pill{display:inline-block;background:#e8faf5;color:#08775f;padding:4px 8px;border-radius:30px;font-size:11px;font-weight:700}.empty{padding:28px 8px;text-align:center;color:var(--muted)}footer{max-width:1100px;margin:18px auto 32px;padding:0 18px;color:var(--muted);font-size:12px}.notice{background:#fff8e7;border:1px solid #f5dfaa;padding:10px 12px;border-radius:10px;font-size:12px;color:#78571a;margin-top:14px}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}.card{padding:15px}table{font-size:12px}}
+</style></head>
+<body>
+<header><div class="tag">Growth Intern Challenge · Prototype</div><h1>Build Your First AI Project in 60 Minutes</h1><p>Free online workshop for final-year engineering students. Track the referral loop, learn which channels work, and move toward the 500-registration target.</p></header>
+<main>
+<div class="grid">
+<div class="card"><div class="label">Registrations logged</div><div class="metric" id="total">0</div><div class="bar"><span id="progress"></span></div><div class="muted" id="targetText">0% of 500 target</div></div>
+<div class="card"><div class="label">To target</div><div class="metric" id="remaining">500</div><div class="muted">Unique entries in this prototype</div></div>
+<div class="card"><div class="label">Top source</div><div class="metric" id="topSource" style="font-size:21px">—</div><div class="muted">Based on logged entries</div></div>
+<div class="card"><div class="label">Budget used</div><div class="metric" id="budget">₹0</div><div class="muted" id="cpr">₹0 per registration</div></div>
+</div>
+<div class="layout">
+<section class="card"><h2>Log a registration</h2><p class="muted">Prototype data stays in this browser using local storage. Use sample data for a demo; do not enter sensitive personal information.</p>
+<form id="regForm">
+<label>Student name or short label</label><input id="student" placeholder="e.g., Student 01" required maxlength="60">
+<label>Registration source</label><select id="source"><option>Campus champion</option><option>Student referral</option><option>WhatsApp group</option><option>College club</option><option>Faculty / placement cell</option><option>Email</option><option>Other</option></select>
+<label>Referral code (optional)</label><input id="refCode" placeholder="e.g., CAMPUS07" maxlength="20">
+<div class="row"><div><label>Budget spent (₹)</label><input id="spend" type="number" min="0" step="1" value="0"></div><div><label>Target</label><input id="target" type="number" min="1" value="500"></div></div>
+<button type="submit">Add registration</button> <button class="secondary" type="button" id="sample">Load 20 demo entries</button>
+</form>
+<div class="notice">Planning assumption: 15 campus champions × 12 registrations (180) + 120 student sharers × 2 (240) + 10 partner communities × 8 (80) = 500. Replace these assumptions with real results.</div>
+</section>
+<section class="card"><div class="row"><h2 style="margin-bottom:0">Channel performance</h2><button class="secondary" id="export" type="button" style="margin-top:0;flex:0 0 auto">Export CSV</button></div>
+<div id="channels" class="muted" style="margin-top:14px">No registrations yet.</div>
+<hr style="border:0;border-top:1px solid #edf1f6;margin:22px 0">
+<h2>Recent registrations</h2><div id="records"></div><button class="danger" id="clear" type="button">Clear all prototype data</button>
+</section></div>
+</main><footer>Demo only—not connected to NxtWave’s registration system. For a live campaign, connect a consent-based form, deduplicate using a secure registration ID, and restrict access to student data.</footer>
+<script>
+const KEY='nxtwave-growth-prototype-v1';
+let data=JSON.parse(localStorage.getItem(KEY)||'[]');
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){
+ const target=Math.max(1,Number($('target').value)||500),total=data.length,spend=data.reduce((a,x)=>a+x.spend,0);
+ $('total').textContent=total;$('remaining').textContent=Math.max(0,target-total);$('progress').style.width=Math.min(100,total/target*100)+'%';$('targetText').textContent=Math.round(total/target*100)+'% of '+target+' target';$('budget').textContent='₹'+spend.toLocaleString('en-IN');$('cpr').textContent='₹'+(total? (spend/total).toFixed(2):'0')+' per registration';
+ const counts={};data.forEach(x=>counts[x.source]=(counts[x.source]||0)+1);
+ const top=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];$('topSource').textContent=top?top[0]:'—';
+ $('channels').innerHTML=Object.keys(counts).length?Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div style="margin:12px 0"><div class="row"><span>${esc(k)}</span><b style="text-align:right">${v}</b></div><div class="bar"><span style="width:${total?v/total*100:0}%;display:block"></span></div></div>`).join(''):'No registrations yet.';
+ const latest=[...data].reverse().slice(0,8);$('records').innerHTML=latest.length?`<table><thead><tr><th>Student label</th><th>Source</th><th>Code</th></tr></thead><tbody>${latest.map(x=>`<tr><td>${esc(x.student)}</td><td>${esc(x.source)}</td><td>${esc(x.code||'—')}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">Entries will appear here.</div>';
+}
+$('regForm').addEventListener('submit',e=>{e.preventDefault();data.push({student:$('student').value.trim(),source:$('source').value,code:$('refCode').value.trim().toUpperCase(),spend:Math.max(0,Number($('spend').value)||0),at:new Date().toISOString()});$('student').value='';$('refCode').value='';$('spend').value='0';save()});
+$('target').addEventListener('input',render);
+$('sample').addEventListener('click',()=>{const items=[['Campus champion','CAMPUS01'],['Student referral','FRIEND02'],['WhatsApp group','WA01'],['College club','CLUB03'],['Faculty / placement cell','FAC01'],['Student referral','FRIEND04'],['Campus champion','CAMPUS02'],['Student referral','FRIEND05'],['Email','MAIL01'],['WhatsApp group','WA02']];for(let i=0;i<20;i++){let a=items[i%items.length];data.push({student:'Demo student '+(i+1),source:a[0],code:a[1],spend:i===0?200:0,at:new Date().toISOString()})}save()});
+$('export').addEventListener('click',()=>{const rows=[['student','source','referral_code','spend_inr','timestamp'],...data.map(x=>[x.student,x.source,x.code,x.spend,x.at])];const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='nxtwave-registration-tracker.csv';a.click();URL.revokeObjectURL(a.href)});
+$('clear').addEventListener('click',()=>{if(confirm('Clear all prototype entries in this browser?')){data=[];save()}});
+render();
+</script></body></html>
